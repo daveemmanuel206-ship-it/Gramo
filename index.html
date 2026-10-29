@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gramo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Carte interactive (food trucks + suivi livreur) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- PWA : installation avec icône sur l'écran -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#FF6B2B">
+    <link rel="icon" type="image/png" href="images/favicon-32.png">
+    <link rel="apple-touch-icon" href="images/icon-180.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="GRAMO">
+</head>
+<body>
+
+    <!-- SPLASH -->
+    <div class="splash" id="splash">
+        <div class="float-emoji e1"><img src="images/sticker-elephant.png" alt="éléphant"></div>
+        <div class="float-emoji e2"><img src="images/sticker-frites.png" alt="frites croustillantes"></div>
+        <div class="float-emoji e3"><img src="images/sticker-bissap.png" alt="bissap citron vert"></div>
+        <div class="float-emoji e4"><img src="images/sticker-poisson.png" alt="attiéké poisson braisé"></div>
+        <div class="float-emoji e5"><img src="images/sticker-beignets.png" alt="beignets"></div>
+        <div class="float-emoji e6"><img src="images/sticker-drapeau.png" alt="drapeau Côte d'Ivoire"></div>
+        <div class="float-emoji e7"><img src="images/sticker-can.png" alt="trophée CAN"></div>
+        <div class="float-emoji e8"><img src="images/sticker-poisson2.png" alt="poisson riz"></div>
+        <div class="splash-logo">GRAMO</div>
+    </div>
+
+    <!-- ONBOARDING : choix avatar + compte -->
+    <div class="onboarding" id="onboarding">
+        <h2>Bienvenue sur GRAMO</h2>
+        <p>Choisis ton avatar pour commencer</p>
+
+        <div class="avatar-picker" id="avatarPicker"></div>
+
+        <input type="text" id="usernameInput" placeholder="Ton pseudo">
+        <button class="btn-primary" id="createAccountBtn">Créer mon compte</button>
+    </div>
+
+    <header>
+        <div class="logo">Gramo</div>
+        <nav>
+            <a href="#">Accueil</a>
+            <a href="#concept">Concept</a>
+            <a href="#commander">Commander</a>
+            <a href="#menu">Menu</a>
+            <a href="#dreamloop">Dream Loop</a>
+            <a href="#avatars">Avatars</a>
+            <a href="#fidelite">Fidélité</a>
+            <a href="#defis">Défis</a>
+            <a href="#profil">Profil</a>
+        </nav>
+        <button class="btn-primary" id="joinBtn">Rejoindre</button>
+    </header>
+
+    <section class="hero">
+        <h1>Mange bon. Monte de niveau.</h1>
+        <p>GRAMO transforme chaque repas en street food en une étape de ta progression. Gagne des Kermones, débloque des avatars, grimpe les paliers du Dream Loop.</p>
+        <div class="hero-actions">
+            <button class="btn-primary">Commencer l'aventure</button>
+            <button class="btn-ghost">Voir le menu</button>
+        </div>
+
+        <div class="hero-stats">
+            <div class="stat">
+                <span class="stat-number" data-target="1240">0</span>
+                <span class="stat-label">Foodies actifs</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number" data-target="3500">0</span>
+                <span class="stat-label">Plats servis</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number" data-target="18900">0</span>
+                <span class="stat-label">Kermones distribuées</span>
+            </div>
+        </div>
+
+        <div class="hero-visual">
+            <div class="avatar-card">
+                <div class="avatar" id="heroAvatar"></div>
+                <p class="avatar-name" id="heroAvatarName">Koffi — Niveau Or</p>
+                <div class="xp-bar">
+                    <div class="xp-fill"></div>
+                </div>
+                <p class="xp-label">0 / 1000 XP</p>
+            </div>
+            <div class="chip chip-1">+50 Kermones</div>
+            <div class="chip chip-2">Combo x2</div>
+            <div class="chip chip-3">Nouveau badge</div>
+        </div>
+    </section>
+
+    <section class="concept" id="concept">
+        <h2>Un food truck, trois façons de jouer</h2>
+        <div class="cards">
+            <div class="card">
+                <h3>Le Food Truck</h3>
+                <p>Des plats de rue revisités, préparés en direct, pensés pour la jeunesse d'Abidjan.</p>
+            </div>
+            <div class="card">
+                <h3>Le Dream Loop</h3>
+                <p>Chaque achat te fait gagner des Kermones. Plus tu joues, plus tu débloques de récompenses.</p>
+            </div>
+            <div class="card">
+                <h3>La communauté</h3>
+                <p>Un avatar personnalisé, un classement entre potes, et bientôt le buffet-restaurant GRAMO.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="commander" id="commander">
+        <h2>Commande où que tu sois</h2>
+        <p class="commander-sub">Les food trucks GRAMO autour de toi, en direct sur Abidjan.</p>
+
+        <div class="map-wrap">
+            <div id="gramoMap" class="gramo-map"></div>
+            <div class="map-badge" id="etaBadge">🛵 Livreur à <span id="etaMin">8</span> min</div>
+        </div>
+
+        <div class="trucks-legend" id="trucksLegend"></div>
+    </section>
+
+    <section class="menu" id="menu">
+        <h2>Choisis ton plat, gagne ton XP</h2>
+
+        <div class="drag-zone">
+            <img class="draggable" src="images/sticker-frites.png" alt="alloco">
+            <img class="draggable" src="images/sticker-brochettes.png" alt="brochettes">
+            <img class="draggable" src="images/sticker-poisson.png" alt="attiéké poisson">
+            <img class="draggable" src="images/sticker-beignets.png" alt="beignets">
+        </div>
+
+        <div class="menu-grid">
+            <div class="menu-item" data-kermones="15">
+                <h3>Alloco Signature</h3>
+                <p>+15 Kermones</p>
+            </div>
+            <div class="menu-item" data-kermones="20">
+                <h3>Brochettes Dream Loop</h3>
+                <p>+20 Kermones</p>
+            </div>
+            <div class="menu-item" data-kermones="18">
+                <h3>Attiéké Royal</h3>
+                <p>+18 Kermones</p>
+            </div>
+        </div>
+
+        <p class="menu-total">
+            Panier : <span id="cartCount">0</span> plat(s) · <span id="cartKermones">0</span> Kermones à gagner
+        </p>
+    </section>
+
+    <section class="dreamloop" id="dreamloop">
+        <h2>Ta progression, palier par palier</h2>
+        <div class="tiers">
+            <div class="tier">
+                <h3>Bronze</h3>
+                <p>0 — 300 Kermones</p>
+            </div>
+            <div class="tier">
+                <h3>Argent</h3>
+                <p>300 — 700 Kermones</p>
+            </div>
+            <div class="tier">
+                <h3>Or</h3>
+                <p>700 — 1000 Kermones</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="avatars" id="avatars">
+        <h2>Choisis celui qui te ressemble</h2>
+        <div class="avatars-grid" id="avatarsShowcase"></div>
+    </section>
+
+    <section class="fidelite" id="fidelite">
+        <h2>Ton programme de fidélité</h2>
+
+        <div class="points-card">
+            <div class="points-num" id="pointsNum">320</div>
+            <p class="points-label">Points GRAMO</p>
+            <div class="points-badges">
+                <span class="badge-pill">🔥 Niveau Chasseur</span>
+                <span class="badge-pill">✓ Membre Dream Loop</span>
+            </div>
+        </div>
+
+        <div class="stamp-card">
+            <h3>Carte Tampon — 10 repas = 1 offert</h3>
+            <div class="stamps" id="stamps"></div>
+            <p class="stamp-note">7/10 tampons — encore 3 repas !</p>
+        </div>
+
+        <div class="abos-grid">
+            <div class="abo-card">
+                <h3>Abonnement Étudiant</h3>
+                <p class="abo-desc">5 repas/semaine · -30% sur tout</p>
+                <p class="abo-price">15 000 F/mois</p>
+            </div>
+            <div class="abo-card">
+                <h3>Pack Famille</h3>
+                <p class="abo-desc">Repas pour 4 personnes inclus</p>
+                <p class="abo-price">35 000 F/mois</p>
+            </div>
+            <div class="abo-card">
+                <h3>GRAMO VIP</h3>
+                <p class="abo-desc">Accès events + priorité + surprises</p>
+                <p class="abo-price">25 000 F/mois</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="defis" id="defis">
+        <h2>La Roue des Défis</h2>
+        <p class="defis-sub">Tourne la roue, relève le défi, gagne ta récompense !</p>
+
+        <div class="wheel-wrap">
+            <div class="wheel-pointer">▼</div>
+            <canvas id="wheelCanvas" width="280" height="280"></canvas>
+        </div>
+        <button class="btn-primary" id="spinBtn">Tourner la roue</button>
+
+        <div class="defi-result" id="defiResult">
+            <div class="defi-emoji" id="defiEmoji">🎯</div>
+            <h3 id="defiTitle">Défi</h3>
+            <p id="defiDesc">Description</p>
+            <div class="defi-actions">
+                <button class="btn-primary" id="defiReussiBtn">✅ Réussi</button>
+                <button class="btn-ghost" id="defiRateBtn">❌ Raté</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="profil" id="profil">
+        <h2>Ton profil</h2>
+
+        <div class="profil-card">
+            <div class="profil-avatar" id="profilAvatar"></div>
+            <p class="profil-name" id="profilName">Koffi</p>
+            <p class="profil-level">⭐ Niveau 7 — Chasseur de Drops</p>
+            <div class="xp-bar">
+                <div class="xp-fill" id="profilXpFill"></div>
+            </div>
+            <p class="xp-label">650 / 1000 XP</p>
+        </div>
+
+        <div class="profil-stats">
+            <div class="stat-box">
+                <span class="stat-box-num">47</span>
+                <span class="stat-box-label">Repas</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-box-num" id="profilPoints">320</span>
+                <span class="stat-box-label">Points</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-box-num">5</span>
+                <span class="stat-box-label">Badges</span>
+            </div>
+        </div>
+
+        <div class="badges-grid" id="badgesGrid"></div>
+    </section>
+
+    <section class="cta">
+        <h2>Prêt à monter de niveau ?</h2>
+        <p>Rejoins le Dream Loop et transforme chaque repas en progression.</p>
+        <button class="btn-primary">Rejoindre GRAMO</button>
+    </section>
+
+    <footer>
+        <div class="logo">Gramo</div>
+        <p>© 2026 GRAMO — Street food gamifié, Abidjan.</p>
+    </footer>
+
+    <div class="toast" id="toast">Bienvenue dans le Dream Loop GRAMO !</div>
+
+    <script src="script.js"></script>
+</body>
+</html>
